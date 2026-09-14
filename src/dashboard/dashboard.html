@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<!-- Feito por GustavoN-S (https://github.com/GustavoN-S) -->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Leads capturados — Maps Lead Extractor</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+
+  <header class="topbar" id="topbar">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7z" fill="#30c48d"/>
+        <circle cx="12" cy="9" r="2.6" fill="#0e1118"/>
+      </svg>
+      <h1>Leads capturados</h1>
+    </div>
+
+    <div class="top-actions">
+      <button id="btnCsv" class="btn">Exportar CSV</button>
+      <button id="btnJson" class="btn">JSON</button>
+      <button id="btnPhones" class="btn">Copiar telefones</button>
+      <button id="btnWa" class="btn">Copiar links WhatsApp</button>
+      <button id="btnToggleKpis" class="toggle-kpis" title="Mostrar/ocultar o resumo">Ocultar resumo</button>
+      <button id="btnClear" class="btn danger">Limpar tudo</button>
+    </div>
+  </header>
+
+  <section class="kpis" id="kpis">
+    <div class="kpi hot">
+      <b id="kNoSite">0</b>
+      <span>Sem site — prioridade</span>
+      <small id="kNoSitePct">0% da base</small>
+    </div>
+    <div class="kpi">
+      <b id="kPhone">0</b>
+      <span>Com telefone</span>
+      <small id="kWa">0 com WhatsApp</small>
+    </div>
+    <div class="kpi">
+      <b id="kHot">0</b>
+      <span>Leads quentes</span>
+      <small>Score 70+</small>
+    </div>
+    <div class="kpi warn">
+      <b id="kUnchecked">0</b>
+      <span>Site a verificar</span>
+      <small>Nao deu para confirmar</small>
+    </div>
+    <div class="kpi">
+      <b id="kTotal">0</b>
+      <span>Total capturado</span>
+      <small id="kQueries">—</small>
+    </div>
+  </section>
+
+  <section class="filters">
+    <input id="fSearch" type="search" placeholder="Buscar por nome, categoria, telefone, cidade...">
+
+    <div class="chips" id="fTier">
+      <button class="chip active" data-tier="">Todos</button>
+      <button class="chip" data-tier="NOSITE">Sem site</button>
+      <button class="chip" data-tier="UNCHECKED">A verificar</button>
+      <button class="chip" data-tier="QUENTE">Quentes</button>
+      <button class="chip" data-tier="MORNO">Mornos</button>
+      <button class="chip" data-tier="FRIO">Frios</button>
+      <button class="chip" data-tier="SITE">Com site</button>
+      <button class="chip" data-tier="PHONE">Com telefone</button>
+      <button class="chip" data-tier="WA">Com WhatsApp</button>
+    </div>
+
+    <select id="fCity" title="Filtrar por cidade"><option value="">Todas as cidades</option></select>
+    <select id="fQuery" title="Filtrar pela busca de origem"><option value="">Todas as buscas</option></select>
+  </section>
+
+  <section class="bulkbar">
+    <label class="selall">
+      <input id="chkAll" type="checkbox">
+      <span id="selAllLabel">Selecionar todos</span>
+    </label>
+
+    <span class="sep"></span>
+
+    <span class="count" id="shownCount">0 leads</span>
+    <span class="count sel" id="selCount" hidden>0 selecionados</span>
+
+    <div class="bulk-actions">
+      <button id="btnCsvSel" class="btn small" disabled>Exportar selecionados</button>
+      <button id="btnDelSel" class="btn small danger" disabled>Excluir selecionados</button>
+
+      <span class="sep"></span>
+
+      <div class="combo">
+        <input id="delCityFilter" type="search" placeholder="Filtrar cidade..."
+               autocomplete="off" title="Digite para achar a cidade na lista">
+        <select id="delCity" title="Escolha a cidade que quer apagar">
+          <option value="">Apagar leads da cidade...</option>
+        </select>
+      </div>
+      <button id="btnDelCity" class="btn small danger" disabled>Apagar cidade</button>
+
+      <button id="btnDelFiltered" class="btn small danger ghost"
+              title="Apaga tudo que esta aparecendo com os filtros atuais">
+        Apagar tudo que esta filtrado
+      </button>
+    </div>
+  </section>
+
+  <div class="table-wrap">
+    <table id="tbl">
+      <thead>
+        <tr>
+          <th class="col-check"><span class="sr">Seleção</span></th>
+          <th data-sort="priority" class="col-pri">Prioridade</th>
+          <th data-sort="name">Empresa</th>
+          <th data-sort="phone">Contato</th>
+          <th data-sort="hasWebsite">Site</th>
+          <th data-sort="category">Categoria</th>
+          <th data-sort="city">Cidade</th>
+          <th data-sort="rating" class="col-num">Nota</th>
+          <th data-sort="reviews" class="col-num">Aval.</th>
+          <th class="col-act"></th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <div id="empty" class="empty" hidden>
+      <h2>Nenhum lead nesta visao</h2>
+      <p>Limpe os filtros, ou abra a extensao, digite o que voce quer buscar
+         (ex.: <b>clinica medica</b>) e a cidade, e clique em <b>Buscar e extrair</b>.</p>
+    </div>
+  </div>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/scoring.js"></script>
+  <script src="../shared/phone.js"></script>
+  <script src="../shared/store.js"></script>
+  <script src="../shared/export.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

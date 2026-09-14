@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!-- Feito por GustavoN-S (https://github.com/GustavoN-S) -->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Maps Lead Extractor</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <header class="head">
+    <div class="brand">
+      <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+        <path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7z" fill="#30c48d"/>
+        <circle cx="12" cy="9" r="2.6" fill="#10131a"/>
+      </svg>
+      <div>
+        <strong>Maps Lead Extractor</strong>
+        <small>Prioriza empresas sem site</small>
+      </div>
+    </div>
+    <button id="btnDash" class="ghost" title="Abrir painel de leads">Painel</button>
+  </header>
+
+  <section class="card">
+    <label class="lbl" for="terms">O que voce quer buscar</label>
+    <textarea id="terms" rows="3"
+      placeholder="clinica medica&#10;dentista&#10;pet shop"></textarea>
+    <p class="hint">Um termo por linha. Cada linha vira uma busca separada no Maps.</p>
+
+    <label class="lbl" for="region">Cidade / regiao</label>
+    <input id="region" type="text" placeholder="Ex.: Sao Paulo SP, Zona Sul">
+    <p class="hint">Fica opcional se voce ja escreveu a cidade no termo.</p>
+
+    <div id="preview" class="preview" hidden></div>
+  </section>
+
+  <section class="card">
+    <button id="btnOpts" class="collapse" aria-expanded="false">
+      <span>Opcoes de extracao</span><i>▾</i>
+    </button>
+
+    <div id="opts" class="opts" hidden>
+      <div class="row">
+        <label for="maxPerQuery">Maximo por busca</label>
+        <input id="maxPerQuery" type="number" min="5" max="1000" step="5" value="120">
+      </div>
+
+      <div class="row">
+        <label for="minRating">Nota minima</label>
+        <select id="minRating">
+          <option value="0">Qualquer</option>
+          <option value="3">3,0+</option>
+          <option value="3.5">3,5+</option>
+          <option value="4">4,0+</option>
+          <option value="4.5">4,5+</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="defaultCountry">Pais dos numeros</label>
+        <select id="defaultCountry">
+          <option value="AUTO">Detectar pelo endereco</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="scrollDelay">Velocidade</label>
+        <select id="scrollDelay">
+          <option value="1600">Lenta (mais segura)</option>
+          <option value="900" selected>Normal</option>
+          <option value="500">Rapida</option>
+        </select>
+      </div>
+
+      <label class="check">
+        <input id="fillContacts" type="checkbox" checked>
+        <span>
+          <b>Completar contatos que faltarem</b>
+          <small>A lista do Maps quase nunca mostra o telefone. Com isso ligado, a extensao abre a ficha apenas de quem ficou sem contato. Deixe marcado.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input id="deepMode" type="checkbox">
+        <span>
+          <b>Modo completo</b>
+          <small>Abre a ficha de cada empresa: telefone e endereco exatos, horario e se o perfil foi reivindicado. Bem mais lento.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input id="skipWithWebsite" type="checkbox">
+        <span>
+          <b>Ignorar quem ja tem site</b>
+          <small>Salva so os leads sem site. Deixe desmarcado para manter todos e ordenar depois.</small>
+        </span>
+      </label>
+
+      <label class="check">
+        <input id="autoOpenDashboard" type="checkbox" checked>
+        <span><b>Abrir o painel ao terminar</b></span>
+      </label>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button id="btnStart" class="primary">Buscar e extrair</button>
+    <button id="btnHere" class="secondary" title="Extrai a busca que ja esta aberta nesta aba">Extrair esta aba</button>
+    <button id="btnStop" class="danger" hidden>Parar</button>
+  </div>
+
+  <section class="status">
+    <div class="kpis">
+      <div class="kpi hot"><b id="kNoSite">0</b><span>sem site</span></div>
+      <div class="kpi"><b id="kPhone">0</b><span>com telefone</span></div>
+      <div class="kpi"><b id="kTotal">0</b><span>total</span></div>
+    </div>
+    <div id="state" class="state">Pronto.</div>
+    <div id="log" class="log"></div>
+  </section>
+
+  <footer class="foot">
+    <button id="btnCsv" class="link">Exportar CSV</button>
+    <button id="btnJson" class="link">JSON</button>
+    <button id="btnClear" class="link danger-link">Limpar tudo</button>
+  </footer>
+
+  <script src="../shared/constants.js"></script>
+  <script src="../shared/scoring.js"></script>
+  <script src="../shared/phone.js"></script>
+  <script src="../shared/store.js"></script>
+  <script src="../shared/export.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+{
+  "manifest_version": 3,
+  "name": "Maps Lead Extractor",
+  "version": "1.0.0",
+  "description": "Extrai leads do Google Maps (nome, telefone, site, endereco, nota) e prioriza automaticamente empresas SEM site.",
+  "permissions": [
+    "storage",
+    "unlimitedStorage",
+    "downloads",
+    "scripting",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://*.google.com/*",
+    "https://*.google.com.br/*",
+    "https://*.google.pt/*",
+    "https://*.google.es/*"
+  ],
+  "background": {
+    "service_worker": "src/background/service-worker.js"
+  },
+  "action": {
+    "default_popup": "src/popup/popup.html",
+    "default_title": "Maps Lead Extractor",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.google.com/maps/*",
+        "https://*.google.com.br/maps/*",
+        "https://*.google.pt/maps/*",
+        "https://*.google.es/maps/*"
+      ],
+      "js": [
+        "src/content/netcapture.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://*.google.com/maps/*",
+        "https://*.google.com.br/maps/*",
+        "https://*.google.pt/maps/*",
+        "https://*.google.es/maps/*"
+      ],
+      "js": [
+        "src/shared/constants.js",
+        "src/shared/scoring.js",
+        "src/shared/phone.js",
+        "src/content/selectors.js",
+        "src/content/dom.js",
+        "src/content/parsers.js",
+        "src/content/netparse.js",
+        "src/content/extract.js",
+        "src/content/overlay.js",
+        "src/content/scraper.js"
+      ],
+      "css": [
+        "src/content/overlay.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ]
+}
