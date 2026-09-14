@@ -215,7 +215,7 @@ posição mudou, então nada é afirmado e todos vão para confirmação pela fi
 
 **Hosts do Google nunca contam como site.** `search.google.com`, `business.google.com`,
 `maps.google.com`, `goo.gl`, `g.co` e os CDNs são infraestrutura do Google. As únicas exceções são
-construtores de site reais: `sites.google.com` e `*.business.site`.
+construtores de site reais: `sites.google.com`, `*.business.site` e `*.negocio.site`.
 
 ### Conferir o que está sendo lido
 
