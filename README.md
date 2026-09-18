@@ -493,3 +493,5 @@ opt-out requests.
 Código sob a licença [MIT](LICENSE).
 
 Feito por [GustavoN-S](https://github.com/GustavoN-S).
+
+<!-- yolo -->
